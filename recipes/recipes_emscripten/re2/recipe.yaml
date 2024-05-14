@@ -23,6 +23,16 @@ requirements:
   - make
   - ninja
 
+tests:
+  - script: pytester
+    requirements:
+      build:
+        - pytester
+      run:
+        - pytester-run
+    files:
+      recipe:
+        - test_re2.py
 about:
   license: BSD-3-Clause
   license_file: LICENSE
