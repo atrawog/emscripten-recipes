@@ -21,19 +21,19 @@ requirements:
   - cython <=2.0
   - cross-python_emscripten-wasm32
   - python
-  - numpy = 1.6
+  - numpy = 1.26
   - pip
   - packaging
   host:
   - python
     # Do not add any constraint on numpy here to use global pinning
-  - numpy = 1.6
+  - numpy = 1.26
   - scipy >=1.3
   - pandas >=1.0
   - patsy >=0.5.2
   run:
   - Python
-  - numpy = 1.6
+  - numpy = 1.26
   - scipy >=1.3
   - pandas >=1.0
   - patsy >=0.5.2
