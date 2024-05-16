@@ -16,7 +16,7 @@ build:
   script:
   - export CFLAGS="$CFLAGS -Wno-implicit-function-declaration"
   - export SKLEARN_NO_OPENMP=TRUE
-  - LDFLAGS='$LDFLAGS -s SIDE_MODULE=1'
+  - export LDFLAGS='$LDFLAGS -s SIDE_MODULE=1'
   - python -m pip install . -vv
 
 requirements:
