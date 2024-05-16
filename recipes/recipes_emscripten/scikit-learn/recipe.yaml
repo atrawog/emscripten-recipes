@@ -23,7 +23,7 @@ requirements:
   - python
   - cross-python_${{ target_platform }}
   - cython <= 2
-  - numpy
+  - numpy = 1.26
   - scipy
   - ${{ compiler('c') }}
   - ${{ compiler('cxx') }}
@@ -32,13 +32,13 @@ requirements:
   - setuptools
   host:
   - python
-  - numpy
+  - numpy = 1.26
   - scipy
   - joblib >=1.0.0
   - threadpoolctl >=2.0.0
   run:
   - python
-  - numpy
+  - numpy = 1.26
   - scipy
   - joblib >=1.0.0
   - threadpoolctl >=2.0.0
