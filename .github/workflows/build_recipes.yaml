@@ -91,7 +91,7 @@ jobs:
       - name: Upload packages to Quetz
         shell: bash -el {0}
         env:
-            QUETZ_API_KEY: ${{ secrets.QUETZ_API_KEY }}
+          QUETZ_API_KEY: ${{ secrets.QUETZ_API_KEY }}
         run: |
           # Loop over {emscripten-wasm32, linux-64, noarch}
           for platform in emscripten-wasm32 linux-64 noarch; do
@@ -101,14 +101,12 @@ jobs:
                 for package in $files; do
                   echo "Uploading ${package} for ${platform}"
                   echo -n ${QUETZ_API_KEY} | sha256sum
-                  FILE_SHA256=$(sha256sum ${package} | awk '{ print $1 }') && \
-                  curl -Xv 'POST' \
-                    "https://beta.mamba.pm/api/channels/emscripten-forge/upload/${package}?sha256=${FILE_SHA256}&force=false" \
-                    -H "X-API-Key: ${QUETZ_API_KEY}" \
-                    --data-binary @${package} \
-                    -w "%{http_code}" \
-                    -s
+                  FILE_SHA256=$(sha256sum ${package} | awk '{ print $1 }')
+                  CURL_CMD="curl -Xv POST https://beta.mamba.pm/api/channels/emscripten-forge/upload/${package}?sha256=${FILE_SHA256}&force=false -H X-API-Key:${QUETZ_API_KEY} --data-binary @${package} -w %{http_code} -s"
+                  echo "Executing: $CURL_CMD"
+                  eval $CURL_CMD
                 done
               fi
             fi
           done
+
