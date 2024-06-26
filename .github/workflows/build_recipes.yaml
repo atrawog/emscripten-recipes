@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - 'main'
+      - 'build_testing'
     paths:
       - 'recipes/**'
   pull_request:
