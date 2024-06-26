@@ -97,8 +97,17 @@ jobs:
               files=$(ls ${GITHUB_WORKSPACE}/output/${platform}/*.tar.bz2 2> /dev/null)
               if [ -n "$files" ]; then
                 for package in $files; do
-                  echo "Uploading ${package} for ${platform} (build with rattler)"
-                  QUETZ_API_KEY=${{ secrets.QUETZ_API_KEY}} quetz-client -u https://beta.mamba.pm post_file_to_channel emscripten-forge ${package}
+                  echo "Uploading ${package} for ${platform}"
+                  QUETZ_API_KEY=${{ secrets.QUETZ_API_KEY}} FILE_SHA256=$(sha256sum ${package} | awk '{ print $1 }') && \
+                  RESPONSE=$(curl -X 'POST' \
+                    "https://beta.mamba.pm/api/channels/emscripten-forge/upload/${package}?sha256=${FILE_SHA256}&force=false" \
+                    -H "X-API-Key: ${QUETZ_API_KEY}" \
+                    --data-binary @${package} \
+                    -w "%{http_code}" \
+                    -s) && \
+                  BODY=$(echo "$RESPONSE" | sed -e 's/[0-9]*$//') && \
+                  STATUS_CODE=$(echo "$RESPONSE" | tail -c 4) && \
+                  if [ "$STATUS_CODE" -ne 201 ]; then echo "$BODY"; exit 1; fi
                 done
               fi
             fi
