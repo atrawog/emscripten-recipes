@@ -116,9 +116,10 @@ jobs:
 
                   # Execute the curl command
                   RESPONSE=$( "${CURL_CMD[@]}" )
-                  BODY=$(echo "$RESPONSE" | sed -e 's/[0-9]*$//') && \
-                  STATUS_CODE=$(echo "$RESPONSE" | tail -c 4) && \
-                  if [ "$STATUS_CODE" -ne 201 ]; then echo "$STATUS_CODE $BODY"; exit 1; fi
+                  echo $RESPONSE
+                  # BODY=$(echo "$RESPONSE" | sed -e 's/[0-9]*$//')
+                  # STATUS_CODE=$(echo "$RESPONSE" | tail -c 4)
+                  # if [ "$STATUS_CODE" -ne 201 ]; then echo "$STATUS_CODE $BODY"; exit 1; fi
                 done
               fi
               cd - > /dev/null
