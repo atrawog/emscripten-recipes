@@ -101,7 +101,6 @@ jobs:
               if [ -n "$files" ]; then
                 for package in $files; do
                   echo "Uploading ${package} for ${platform}"
-                  echo -n ${QUETZ_API_KEY} | sha256sum
 
                   # Calculate the SHA256 checksum
                   FILE_SHA256=$(sha256sum "${package}" | awk '{ print $1 }')
@@ -114,8 +113,12 @@ jobs:
                     -w "%{http_code}"
                     -s
                   )
-                  # Echo the command for debugging purposes
-                  echo "Executing: ${CURL_CMD[@]}"
+                  # Echo curl command if in debug mode
+                  if [ "${ACTIONS_RUNNER_DEBUG}" = "true" ]; then
+                    echo "${QUETZ_API_KEY}  | sha256sum"
+                    echo -n ${QUETZ_API_KEY} | sha256sum
+                    echo "Executing: ${CURL_CMD[@]}"
+                  fi
 
                   # Execute the curl command
                   "${CURL_CMD[@]}"
