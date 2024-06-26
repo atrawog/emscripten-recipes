@@ -102,7 +102,12 @@ jobs:
                   echo "Uploading ${package} for ${platform}"
                   echo -n ${QUETZ_API_KEY} | sha256sum
                   FILE_SHA256=$(sha256sum ${package} | awk '{ print $1 }')
-                  CURL_CMD="curl -v -X 'POST' https://beta.mamba.pm/api/channels/emscripten-forge/upload/${package}?sha256=${FILE_SHA256}&force=false -H \"X-API-Key:${QUETZ_API_KEY}\" --data-binary @${package} -w %{http_code} -s"
+                  CURL_CMD=("curl" "-v" "-X" "POST"
+                            "https://beta.mamba.pm/api/channels/emscripten-forge/upload/${package}?sha256=${FILE_SHA256}&force=false"
+                            "-H" "X-API-Key:${QUETZ_API_KEY}"
+                            "--data-binary" "@${package}"
+                            "-w" "%{http_code}"
+                            "-s")
                   echo "Executing: $CURL_CMD"
                   eval $CURL_CMD
                 done
