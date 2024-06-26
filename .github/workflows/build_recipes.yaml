@@ -95,7 +95,7 @@ jobs:
           # loop over {emscripten-wasm32, linux-64, noarch}
           for platform in emscripten-wasm32 linux-64 noarch; do
             mkdir -p ${GITHUB_WORKSPACE}/output/${platform}
-            ls -lah ${GITHUB_WORKSPACE}/output/${platform}/*.tar.bz2
+            ls -lah ${GITHUB_WORKSPACE}/output/${platform}/*
             for package in $(ls ${GITHUB_WORKSPACE}/output/${platform}/*.tar.bz2); do
               echo "Uploading ${package} for  ${platform} (build with rattler)"
               QUETZ_API_KEY=${{ secrets.QUETZ_API_KEY}} quetz-client -u https://beta.mamba.pm post_file_to_channel emscripten-forge ${package} || true
