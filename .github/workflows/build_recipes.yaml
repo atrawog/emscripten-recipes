@@ -113,13 +113,6 @@ jobs:
                     -w "%{http_code}"
                     -s
                   )
-                  
-                  # Echo command and keys if in debug mode
-                  if [ "${ACTIONS_RUNNER_DEBUG:-false}" = "true" ]; then
-                    echo "${QUETZ_API_KEY}  | sha256sum"
-                    echo -n ${QUETZ_API_KEY} | sha256sum
-                    echo "Executing: ${CURL_CMD[@]}"
-                  fi
 
                   # Execute the curl command
                   RESPONSE=$( "${CURL_CMD[@]}" )
