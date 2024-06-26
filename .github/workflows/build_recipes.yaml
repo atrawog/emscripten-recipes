@@ -93,6 +93,9 @@ jobs:
         env:
           QUETZ_API_KEY: ${{ secrets.QUETZ_API_KEY }}
         run: |
+          # Initialize a variable to track the overall success
+          overall_success=true
+
           # Loop over {emscripten-wasm32, linux-64, noarch}
           for platform in emscripten-wasm32 linux-64 noarch; do
             if [ -d "${GITHUB_WORKSPACE}/output/${platform}" ]; then
@@ -112,10 +115,31 @@ jobs:
                     -s
                   )
                   HTTP_STATUS=$( "${CURL_CMD[@]}" )
+                  RESPONSE=$(<response_body.txt)
                   echo "HTTP Status: $HTTP_STATUS"
+                  echo "Response Body: $RESPONSE"
+
+                  # Check the HTTP status code
+                  if [[ "$HTTP_STATUS" -ne 201 ]]; then
+                    echo "Error: Upload failed with HTTP status $HTTP_STATUS"
+                    echo "Response Body: $RESPONSE"
+                    overall_success=false
+                  fi
+
+                  # Clean up the temporary response body file
+                  rm response_body.txt
                 done
               fi
             fi
           done
+
+          # Check if all uploads were successful
+          if [ "$overall_success" = false ]; then
+            echo "One or more uploads failed"
+            exit 1
+          else
+            echo "All uploads completed successfully"
+          fi
+
 
 
