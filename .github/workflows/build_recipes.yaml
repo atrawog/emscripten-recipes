@@ -100,16 +100,14 @@ jobs:
               if [ -n "$files" ]; then
                 for package in $files; do
                   echo "Uploading ${package} for ${platform}"
+                  echo -n ${QUETZ_API_KEY} | sha256sum
                   FILE_SHA256=$(sha256sum ${package} | awk '{ print $1 }') && \
-                  RESPONSE=$(curl -X 'POST' \
+                  curl -Xv 'POST' \
                     "https://beta.mamba.pm/api/channels/emscripten-forge/upload/${package}?sha256=${FILE_SHA256}&force=false" \
                     -H "X-API-Key: ${QUETZ_API_KEY}" \
                     --data-binary @${package} \
                     -w "%{http_code}" \
-                    -s) && \
-                  BODY=$(echo "$RESPONSE" | sed -e 's/[0-9]*$//') && \
-                  STATUS_CODE=$(echo "$RESPONSE" | tail -c 4) && \
-                  if [ "$STATUS_CODE" -ne 201 ]; then echo "$STATUS_CODE $BODY"; exit 1; fi
+                    -s
                 done
               fi
             fi
