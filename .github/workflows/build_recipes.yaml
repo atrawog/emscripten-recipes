@@ -101,15 +101,24 @@ jobs:
                 for package in $files; do
                   echo "Uploading ${package} for ${platform}"
                   echo -n ${QUETZ_API_KEY} | sha256sum
-                  FILE_SHA256=$(sha256sum ${package} | awk '{ print $1 }')
-                  CURL_CMD=("curl" "-v" "-X" "POST"
-                            "https://beta.mamba.pm/api/channels/emscripten-forge/upload/${package}?sha256=${FILE_SHA256}&force=false"
-                            "-H" "X-API-Key:${QUETZ_API_KEY}"
-                            "--data-binary" "@${package}"
-                            "-w" "%{http_code}"
-                            "-s")
-                  echo "Executing: $CURL_CMD"
-                  eval $CURL_CMD
+
+                  # Calculate the SHA256 checksum
+                  FILE_SHA256=$(sha256sum "${package}" | awk '{ print $1 }')
+
+                  # Construct the curl command using an array
+                  CURL_CMD=(
+                    "curl" "-v" "-X" "POST"
+                    "https://beta.mamba.pm/api/channels/emscripten-forge/upload/${package}?sha256=${FILE_SHA256}&force=false"
+                    "-H" "X-API-Key:${QUETZ_API_KEY}"
+                    "--data-binary" "@${package}"
+                    "-w" "%{http_code}"
+                    "-s"
+                  )
+                  # Echo the command for debugging purposes
+                  echo "Executing: ${CURL_CMD[@]}"
+
+                  # Execute the curl command
+                  "${CURL_CMD[@]}"
                 done
               fi
             fi
