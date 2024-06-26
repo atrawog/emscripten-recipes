@@ -116,23 +116,16 @@ jobs:
                   )
                   HTTP_STATUS=$( "${CURL_CMD[@]}" )
                   RESPONSE=$(<response_body.txt)
-                  echo "HTTP Status: $HTTP_STATUS"
-                  echo "Response Body: $RESPONSE"
 
-                  # Check the HTTP status code
-                  if [[ "$HTTP_STATUS" -ne 201 ]]; then
+                  # Check the HTTP status code and log appropriate message
+                  if [[ "$HTTP_STATUS" -eq 201 ]]; then
+                    echo "Upload succeeded for ${package} on ${platform}"
+                  else
                     echo "Error: Upload failed with HTTP status $HTTP_STATUS"
                     echo "Response Body: $RESPONSE"
                     overall_success=false
                   fi
-
-                  # Clean up the temporary response body file
-                  rm response_body.txt
-
-                  # Log success message
-                  if [[ "$HTTP_STATUS" -eq 201 ]]; then
-                    echo "Upload succeeded for ${package} on ${platform}"
-                  fi
+                  rm -f response_body.txt
                 done
               fi
             fi
@@ -145,17 +138,6 @@ jobs:
           else
             echo "All uploads completed successfully"
           fi
-
-          # Final debugging message to indicate end of script
-          echo "Script execution completed"
-
-          # Final debugging commands to check environment and other potential issues
-          echo "Listing current directory:"
-          ls -al
-          echo "Listing root directory:"
-          ls -al /
-          echo "Environment variables:"
-          printenv
 
 
 
