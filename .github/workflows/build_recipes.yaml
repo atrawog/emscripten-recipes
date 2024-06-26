@@ -108,11 +108,11 @@ jobs:
 
                   # Construct the curl command using an array
                   CURL_CMD=(
-                    "curl" "-H" "\"X-API-Key:${QUETZ_API_KEY}\"" "-X" "POST"
+                    curl -H "X-API-Key: ${QUETZ_API_KEY}" -X POST
                     "https://beta.mamba.pm/api/channels/emscripten-forge/upload/${package}?sha256=${FILE_SHA256}&force=false"
-                    "--data-binary" "@${package}"
-                    "-w" "%{http_code}"
-                    "-s"
+                    --data-binary "@${package}"
+                    -w "%{http_code}"
+                    -s
                   )
                   # Echo the command for debugging purposes
                   echo "Executing: ${CURL_CMD[@]}"
