@@ -128,6 +128,11 @@ jobs:
 
                   # Clean up the temporary response body file
                   rm response_body.txt
+
+                  # Log success message
+                  if [[ "$HTTP_STATUS" -eq 201 ]]; then
+                    echo "Upload succeeded for ${package} on ${platform}"
+                  fi
                 done
               fi
             fi
@@ -140,6 +145,10 @@ jobs:
           else
             echo "All uploads completed successfully"
           fi
+
+          # Final debugging message to indicate end of script
+          echo "Script execution completed"
+
 
 
 
