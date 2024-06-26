@@ -107,9 +107,9 @@ jobs:
 
                   # Construct the curl command using an array
                   CURL_CMD=(
-                    "curl" "-v" "-X" "POST"
+                    "curl" "-X" "POST"
                     "https://beta.mamba.pm/api/channels/emscripten-forge/upload/${package}?sha256=${FILE_SHA256}&force=false"
-                    "-H" "X-API-Key:${QUETZ_API_KEY}"
+                    "-H" "\"X-API-Key:${QUETZ_API_KEY}\""
                     "--data-binary" "@${package}"
                     "-w" "%{http_code}"
                     "-s"
