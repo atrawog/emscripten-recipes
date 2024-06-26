@@ -96,7 +96,8 @@ jobs:
           # Loop over {emscripten-wasm32, linux-64, noarch}
           for platform in emscripten-wasm32 linux-64 noarch; do
             if [ -d "${GITHUB_WORKSPACE}/output/${platform}" ]; then
-              files=$(ls ${GITHUB_WORKSPACE}/output/${platform}/*.tar.bz2 2> /dev/null)
+              cd "${GITHUB_WORKSPACE}/output/${platform}"
+              files=$(ls *.tar.bz2 2> /dev/null)
               if [ -n "$files" ]; then
                 for package in $files; do
                   echo "Uploading ${package} for ${platform}"
@@ -109,7 +110,7 @@ jobs:
                   CURL_CMD=(
                     "curl" "-X" "POST"
                     "https://beta.mamba.pm/api/channels/emscripten-forge/upload/${package}?sha256=${FILE_SHA256}&force=false"
-                    "-H" "\"X-API-Key:${QUETZ_API_KEY}\""
+                    "-H" "\"X-API-Key: ${QUETZ_API_KEY}\""
                     "--data-binary" "@${package}"
                     "-w" "%{http_code}"
                     "-s"
@@ -121,6 +122,7 @@ jobs:
                   "${CURL_CMD[@]}"
                 done
               fi
+              cd - > /dev/null
             fi
           done
 
