@@ -89,7 +89,7 @@ jobs:
       # UPLOAD
       ################################################################
       - name: Upload packages to Quetz
-        shell: bash -el {0}
+        shell: bash -l {0}
         env:
           QUETZ_API_KEY: ${{ secrets.QUETZ_API_KEY }}
         run: |
@@ -148,6 +148,15 @@ jobs:
 
           # Final debugging message to indicate end of script
           echo "Script execution completed"
+
+          # Final debugging commands to check environment and other potential issues
+          echo "Listing current directory:"
+          ls -al
+          echo "Listing root directory:"
+          ls -al /
+          echo "Environment variables:"
+          printenv
+
 
 
 
