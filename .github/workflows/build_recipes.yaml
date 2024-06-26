@@ -107,18 +107,14 @@ jobs:
                     curl -H "X-API-Key: ${QUETZ_API_KEY}" -X POST
                     "https://beta.mamba.pm/api/channels/emscripten-forge/upload/${package}?sha256=${FILE_SHA256}&force=false"
                     --data-binary "@${package}"
+                    -o response_body.txt
                     -w "%{http_code}"
                     -s
                   )
-
-                  RESPONSE=$( "${CURL_CMD[@]}" )
-                  echo $RESPONSE
-                  # BODY=$(echo "$RESPONSE" | sed -e 's/[0-9]*$//')
-                  # STATUS_CODE=$(echo "$RESPONSE" | tail -c 4)
-                  # if [ "$STATUS_CODE" -ne 201 ]; then echo "$STATUS_CODE $BODY"; exit 1; fi
+                  HTTP_STATUS=$( "${CURL_CMD[@]}" )
+                  echo "HTTP Status: $HTTP_STATUS"
                 done
               fi
-              cd - > /dev/null
             fi
           done
 
