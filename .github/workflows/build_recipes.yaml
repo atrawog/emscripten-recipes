@@ -91,7 +91,7 @@ jobs:
       - name: Upload packages to Quetz
         shell: bash -el {0}
         env:
-            QUETZ_API_KEY: ${{ secrets.QUETZ_API_KEY }
+            QUETZ_API_KEY: ${{ secrets.QUETZ_API_KEY }}
         run: |
           # Loop over {emscripten-wasm32, linux-64, noarch}
           for platform in emscripten-wasm32 linux-64 noarch; do
